@@ -1,5 +1,6 @@
 """
 Dashboard Page - Quick information cards
+CustomTkinter 6.x Compatible
 """
 
 import customtkinter as ctk
@@ -7,7 +8,7 @@ from ..config.theme import THEME_CONFIG
 
 
 class DashboardPage(ctk.CTkScrollableFrame):
-    """Dashboard page with quick info cards"""
+    """Dashboard page with quick info cards - CustomTkinter 6.x"""
     
     def __init__(self, parent, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
@@ -17,18 +18,18 @@ class DashboardPage(ctk.CTkScrollableFrame):
         self._create_cards_grid()
     
     def _create_title(self):
-        """Create page title"""
+        """Create page title using CTkLabel"""
         title = ctk.CTkLabel(
             self,
             text="Dashboard",
-            font=("Arial", 24, "bold"),
+            font=ctk.CTkFont(family="Arial", size=24, weight="bold"),
             text_color=THEME_CONFIG["text_primary"],
             anchor="w"
         )
         title.grid(row=0, column=0, sticky="w", pady=(0, 20), padx=10)
     
     def _create_cards_grid(self):
-        """Create grid of info cards"""
+        """Create grid of info cards using CTkFrame"""
         # Card data
         cards_data = [
             ("Dispositivo Conectado", "Nenhum", "📱"),
@@ -48,7 +49,7 @@ class DashboardPage(ctk.CTkScrollableFrame):
         row = 1
         col = 0
         
-        for title, value, icon in cards_data:
+        for title_text, value, icon in cards_data:
             card = ctk.CTkFrame(
                 self,
                 fg_color=THEME_CONFIG["bg_card"],
@@ -59,8 +60,8 @@ class DashboardPage(ctk.CTkScrollableFrame):
             # Card title
             title_label = ctk.CTkLabel(
                 card,
-                text=f"{icon} {title}",
-                font=("Arial", 12, "bold"),
+                text=f"{icon} {title_text}",
+                font=ctk.CTkFont(family="Arial", size=12, weight="bold"),
                 text_color=THEME_CONFIG["text_secondary"],
                 anchor="w"
             )
@@ -70,7 +71,7 @@ class DashboardPage(ctk.CTkScrollableFrame):
             value_label = ctk.CTkLabel(
                 card,
                 text=value,
-                font=("Arial", 16, "bold"),
+                font=ctk.CTkFont(family="Arial", size=16, weight="bold"),
                 text_color=THEME_CONFIG["text_primary"],
                 anchor="w"
             )
