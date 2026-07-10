@@ -1,9 +1,10 @@
-# DiixTool UI Requirements
+# DiixTool UI - Requirements
+# Updated for CustomTkinter 6.x and modern dependencies
 
-## Core Dependencies
-customtkinter>=5.2.0
-CTkTable>=1.8
-Pillow>=10.0.0
+# Core Dependencies
+customtkinter>=6.0.0
+CTkTable>=1.1
+Pillow>=11.0.0
 
-## Optional Dependencies
-ttkbootstrap>=1.10.0
+# Optional Dependencies
+packaging>=24.0

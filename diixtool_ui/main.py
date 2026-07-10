@@ -3,6 +3,7 @@ DiixTool UI - Official Graphical Interface for DiixTool Framework
 
 Theme: Dark Black
 Architecture: MVC/MVP
+CustomTkinter 6.x Compatible
 """
 
 import customtkinter as ctk
@@ -18,7 +19,7 @@ from ui.pages.dashboard import DashboardPage
 
 
 class DiixToolUI(ctk.CTk):
-    """Main Application Window"""
+    """Main Application Window - CustomTkinter 6.x"""
     
     def __init__(self):
         super().__init__()
@@ -28,11 +29,11 @@ class DiixToolUI(ctk.CTk):
         self.geometry("1400x900")
         self.minsize(1200, 700)
         
-        # Set dark theme
-        ctk.set_appearance_mode("dark")
+        # Set dark theme using CustomTkinter 6.x API
+        ctk.set_appearance_mode("Dark")
         ctk.set_default_color_theme("dark-blue")
         
-        # Configure grid
+        # Configure grid layout
         self.grid_columnconfigure(1, weight=1)
         self.grid_rowconfigure(0, weight=1)
         
@@ -46,8 +47,13 @@ class DiixToolUI(ctk.CTk):
         self._load_page("dashboard")
     
     def _create_menubar(self):
-        """Create top menu bar"""
-        self.menubar = ctk.CTkFrame(self, height=40, fg_color=THEME_CONFIG["bg_panel"])
+        """Create top menu bar using CTkFrame"""
+        self.menubar = ctk.CTkFrame(
+            self, 
+            height=40, 
+            fg_color=THEME_CONFIG["bg_panel"],
+            corner_radius=0
+        )
         self.menubar.grid(row=0, column=0, columnspan=2, sticky="ew")
         self.menubar.grid_propagate(False)
         
@@ -64,22 +70,24 @@ class DiixToolUI(ctk.CTk):
                 hover_color=THEME_CONFIG["hover"],
                 text_color=THEME_CONFIG["text_primary"],
                 anchor="w",
+                corner_radius=6,
                 command=lambda m=menu: self._show_menu(m)
             )
             btn.grid(row=0, column=i, padx=5, pady=5)
     
     def _create_sidebar(self):
-        """Create left sidebar"""
+        """Create left sidebar using CTkScrollableFrame"""
         self.sidebar = ctk.CTkScrollableFrame(
             self, 
             width=220, 
             fg_color=THEME_CONFIG["bg_sidebar"],
-            scrollbar_button_color=THEME_CONFIG["hover"]
+            scrollbar_button_color=THEME_CONFIG["hover"],
+            corner_radius=0
         )
         self.sidebar.grid(row=1, column=0, sticky="ns", pady=(0, 40))
         self.sidebar.grid_propagate(False)
         
-        # Sidebar items
+        # Sidebar items with icons
         sidebar_items = [
             ("🏠 Dashboard", "dashboard"),
             ("📱 Dispositivos", "devices"),
@@ -108,11 +116,12 @@ class DiixToolUI(ctk.CTk):
                 self.sidebar,
                 text=icon_text,
                 width=200,
-                height=35,
+                height=38,
                 fg_color="transparent",
                 hover_color=THEME_CONFIG["hover"],
                 text_color=THEME_CONFIG["text_primary"],
                 anchor="w",
+                corner_radius=8,
                 command=lambda p=page_id: self._load_page(p)
             )
             btn.pack(padx=10, pady=2)
@@ -120,7 +129,11 @@ class DiixToolUI(ctk.CTk):
     
     def _create_main_area(self):
         """Create main content area"""
-        self.main_frame = ctk.CTkFrame(self, fg_color=THEME_CONFIG["bg_main"])
+        self.main_frame = ctk.CTkFrame(
+            self, 
+            fg_color=THEME_CONFIG["bg_main"],
+            corner_radius=0
+        )
         self.main_frame.grid(row=1, column=1, sticky="nsew", padx=0, pady=(0, 40))
         self.main_frame.grid_columnconfigure(0, weight=1)
         self.main_frame.grid_rowconfigure(0, weight=1)
@@ -128,8 +141,13 @@ class DiixToolUI(ctk.CTk):
         self.current_page = None
     
     def _create_statusbar(self):
-        """Create bottom status bar"""
-        self.statusbar = ctk.CTkFrame(self, height=40, fg_color=THEME_CONFIG["bg_panel"])
+        """Create bottom status bar using CTkFrame"""
+        self.statusbar = ctk.CTkFrame(
+            self, 
+            height=40, 
+            fg_color=THEME_CONFIG["bg_panel"],
+            corner_radius=0
+        )
         self.statusbar.grid(row=2, column=0, columnspan=2, sticky="ew")
         self.statusbar.grid_propagate(False)
         
@@ -150,7 +168,7 @@ class DiixToolUI(ctk.CTk):
                 lbl_frame,
                 text=label,
                 text_color=THEME_CONFIG["text_secondary"],
-                font=("Arial", 11)
+                font=ctk.CTkFont(family="Arial", size=11)
             )
             lbl_name.pack(side="left", padx=(0, 5))
             
@@ -158,7 +176,7 @@ class DiixToolUI(ctk.CTk):
                 lbl_frame,
                 text=value,
                 text_color=THEME_CONFIG["text_primary"],
-                font=("Arial", 11, "bold")
+                font=ctk.CTkFont(family="Arial", size=11, weight="bold")
             )
             lbl_value.pack(side="left")
         
@@ -167,7 +185,7 @@ class DiixToolUI(ctk.CTk):
             self.statusbar,
             text="Tema: Dark Black",
             text_color=THEME_CONFIG["text_secondary"],
-            font=("Arial", 11)
+            font=ctk.CTkFont(family="Arial", size=11)
         )
         right_status.grid(row=0, column=len(status_labels), sticky="e", padx=15)
     
@@ -185,17 +203,18 @@ class DiixToolUI(ctk.CTk):
         if page_id in self.sidebar_buttons:
             self.sidebar_buttons[page_id].configure(fg_color=THEME_CONFIG["selection"])
         
-        # Create new page
+        # Create new page container
         self.current_page = ctk.CTkScrollableFrame(
             self.main_frame,
             fg_color=THEME_CONFIG["bg_main"],
-            scrollbar_button_color=THEME_CONFIG["hover"]
+            scrollbar_button_color=THEME_CONFIG["hover"],
+            corner_radius=0
         )
         self.current_page.grid(row=0, column=0, sticky="nsew", padx=20, pady=20)
         self.current_page.grid_columnconfigure(0, weight=1)
         self.current_page.grid_rowconfigure(0, weight=1)
         
-        # Load page content based on page_id
+        # Page titles mapping
         page_titles = {
             "dashboard": "Dashboard",
             "devices": "Dispositivos",
@@ -227,7 +246,7 @@ class DiixToolUI(ctk.CTk):
             title_label = ctk.CTkLabel(
                 self.current_page,
                 text=title,
-                font=("Arial", 24, "bold"),
+                font=ctk.CTkFont(family="Arial", size=24, weight="bold"),
                 text_color=THEME_CONFIG["text_primary"],
                 anchor="w"
             )
@@ -237,7 +256,7 @@ class DiixToolUI(ctk.CTk):
             placeholder = ctk.CTkLabel(
                 self.current_page,
                 text=f"Conteúdo da página: {title}\n\nEsta página será implementada com componentes específicos.",
-                font=("Arial", 14),
+                font=ctk.CTkFont(family="Arial", size=14),
                 text_color=THEME_CONFIG["text_secondary"],
                 justify="center"
             )
